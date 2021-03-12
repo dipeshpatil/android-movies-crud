@@ -16,8 +16,8 @@
 
         <com.theophrast.ui.widget.SquareImageView
             android:id="@+id/movie_poster"
-            android:layout_width="181dp"
-            android:layout_height="309dp"
+            android:layout_width="180dp"
+            android:layout_height="310dp"
             android:layout_weight="0.25"
             android:scaleType="fitCenter"
             android:src="@drawable/eee"
