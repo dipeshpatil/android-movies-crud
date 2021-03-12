@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Movie Title"
-            android:inputType="textPersonName" />
+            android:inputType="text" />
 
         <Button
             android:id="@+id/fetch_button"
@@ -31,17 +31,44 @@
             android:layout_height="wrap_content"
             android:text="Fetch" />
 
-        <TextView
-            android:id="@+id/movie_name"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Response" />
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:weightSum="1"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <com.theophrast.ui.widget.SquareImageView
-            android:id="@+id/movie_poster"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="fitCenter"
-            android:src="@drawable/eee" />
+            <com.theophrast.ui.widget.SquareImageView
+                android:id="@+id/movie_poster"
+                android:layout_width="181dp"
+                android:layout_height="309dp"
+                android:layout_weight="0.25"
+                android:scaleType="fitCenter"
+                android:src="@drawable/eee"
+                app:hwRatio="1.4866" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.75"
+                android:padding="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/movie_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Title" />
+
+                <TextView
+                    android:id="@+id/movie_plot"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Movie Plot" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
