@@ -6,12 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "Movies.db";
     public static final String TABLE_NAME = "movies";
@@ -156,25 +150,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{id}
         );
         return true;
-    }
-
-    public void copyDatabase(File dbFile) {
-        if (!dbFile.exists()) {
-            try {
-                InputStream is = context.getAssets().open(DB_NAME);
-                OutputStream os = new FileOutputStream(dbFile);
-
-                byte[] buffer = new byte[1024];
-                while (is.read(buffer) > 0) {
-                    os.write(buffer);
-                }
-
-                os.flush();
-                os.close();
-                is.close();
-            } catch (IOException e) {
-                throw new RuntimeException("Error creating source database", e);
-            }
-        }
     }
 }
