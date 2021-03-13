@@ -1,8 +1,11 @@
 package io.github.dipeshpatil.androidcrud.MoviesList;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,11 +15,14 @@ import com.theophrast.ui.widget.SquareImageView;
 
 import java.util.List;
 
+import io.github.dipeshpatil.androidcrud.DatabaseHelper;
+import io.github.dipeshpatil.androidcrud.DetailActivity;
 import io.github.dipeshpatil.androidcrud.Movies.MovieItem;
 import io.github.dipeshpatil.androidcrud.R;
 
 public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.ViewHolder> {
     private List<MovieItem> list;
+    private DatabaseHelper databaseHelper;
 
     public MoviesListAdapter(List<MovieItem> list) {
         this.list = list;
@@ -35,6 +41,22 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
         holder.titleView.setText(list.get(position).getTitle());
         holder.plotView.setText(list.get(position).getPlot());
         Picasso.get().load(list.get(position).getPoster()).into(holder.posterView);
+
+        databaseHelper = new DatabaseHelper(holder.titleView.getContext());
+
+        holder.viewButton.setOnClickListener(v -> {
+            Cursor cursor = databaseHelper.getAllDataByTitle(list.get(position).getTitle());
+            Intent detailsIntent = new Intent(holder.titleView.getContext(), DetailActivity.class);
+
+            while (cursor.moveToFirst()) {
+                detailsIntent.putExtra("title", cursor.getString(1));
+                detailsIntent.putExtra("plot", cursor.getString(2));
+                detailsIntent.putExtra("poster", cursor.getString(4));
+                break;
+            }
+
+            holder.titleView.getContext().startActivity(detailsIntent);
+        });
     }
 
     @Override
@@ -45,12 +67,15 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView titleView, plotView;
         SquareImageView posterView;
+        Button viewButton, favButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
             titleView = itemView.findViewById(R.id.movie_name);
             plotView = itemView.findViewById(R.id.movie_plot);
             posterView = itemView.findViewById(R.id.movie_poster);
+            viewButton = itemView.findViewById(R.id.button_view);
+            favButton = itemView.findViewById(R.id.button_add_fav);
         }
     }
 }
