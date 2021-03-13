@@ -4,14 +4,12 @@ import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -24,9 +22,12 @@ import com.imangazaliev.slugify.Slugify;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.github.dipeshpatil.androidcrud.Movies.Movie;
+import io.github.dipeshpatil.androidcrud.Movies.MovieItem;
+import io.github.dipeshpatil.androidcrud.MoviesList.MoviesListAdapter;
 
 public class MainActivity extends AppCompatActivity {
     private static final String API_KEY = "e2716675";
@@ -42,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
 
         EditText movieTitle = findViewById(R.id.movie_title);
-        ListView listView = findViewById(R.id.listview);
         Button fetchButton = findViewById(R.id.fetch_button);
 
         ProgressDialog dataDialog = new ProgressDialog(this);
@@ -51,17 +51,22 @@ public class MainActivity extends AppCompatActivity {
 
         String URL = "https://www.omdbapi.com/?apikey=" + API_KEY + "&t=";
 
-        ArrayList<String> arrayList = new ArrayList<>();
+        List<MovieItem> moviesList = new ArrayList<>();
         Cursor data = databaseHelper.getAllData();
 
         if (data.getCount() != 0) {
             while (data.moveToNext()) {
-                arrayList.add(
-                        data.getString(1)
-                );
+                moviesList.add(new MovieItem(
+                        data.getString(1),
+                        data.getString(4),
+                        data.getString(2)
+                ));
             }
-            ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayList);
-            listView.setAdapter(listAdapter);
+
+            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+            MoviesListAdapter adapter = new MoviesListAdapter(moviesList);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setAdapter(adapter);
         }
 
         fetchButton.setOnClickListener(v -> {
@@ -75,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                         Gson gson = builder.create();
                         Movie movie = gson.fromJson(response, Movie.class);
 
-                        if(movie.getResponse().equals("True")){
+                        if (movie.getResponse().equals("True")) {
                             String movieTitleText = movie.getTitle();
                             String moviePlotText = movie.getPlot();
                             String movieRatingText = movie.getImdbRating();
@@ -85,6 +90,14 @@ public class MainActivity extends AppCompatActivity {
                             String movieReleased = movie.getReleased();
                             String movieActors = movie.getActors();
                             String movieDirector = movie.getDirector();
+
+                            moviesList.add(
+                                    new MovieItem(
+                                            movieTitleText,
+                                            moviePosterURL,
+                                            moviePlotText
+                                    )
+                            );
 
                             Slugify slugify = new Slugify();
                             String title_slug = slugify.slugify(movieTitleText.toLowerCase());

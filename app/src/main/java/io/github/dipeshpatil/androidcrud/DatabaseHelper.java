@@ -92,8 +92,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllData() {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery(
-                "SELECT * FROM " + TABLE_NAME,
+                "SELECT * FROM " + TABLE_NAME + " ORDER BY ID DESC",
                 null
+        );
+    }
+
+    public Cursor getDataFromTitleSlug(String title_slug) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        return sqLiteDatabase.rawQuery(
+                "SELECT title_slug FROM " + TABLE_NAME + " WHERE title_slug = ?",
+                new String[]{title_slug}
+        );
+    }
+
+    public Cursor getAllDataByTitle(String title) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        return sqLiteDatabase.rawQuery(
+                "SELECT * FROM " + TABLE_NAME + " WHERE title = ?",
+                new String[]{title}
         );
     }
 

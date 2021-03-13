@@ -4,39 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".DetailActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="0.75"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:padding="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/movie_title"
+        <com.theophrast.ui.widget.SquareImageView
+            android:id="@+id/detail_movie_poster"
+            android:layout_width="257dp"
+            android:layout_height="171dp"
+            android:layout_gravity="center"
+            android:layout_weight="0.25"
+            android:scaleType="fitCenter"
+            android:src="@drawable/eee"
+            app:hwRatio="1.4866" />
+
+        <TextView
+            android:id="@+id/detail_movie_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Movie Title"
-            android:inputType="text" />
+            android:text="Title"
+            android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/fetch_button"
+        <TextView
+            android:id="@+id/detail_movie_plot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Fetch" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
+            android:text="Movie Plot"
+            android:textSize="17sp" />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
