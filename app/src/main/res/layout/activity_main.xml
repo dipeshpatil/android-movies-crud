@@ -4,32 +4,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBlack"
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/movie_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Movie Title"
-            android:inputType="text" />
 
-        <Button
-            android:id="@+id/fetch_button"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Fetch" />
+            android:orientation="horizontal"
+            android:padding="12dp"
+            android:background="@color/colorDark"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_weight="0.1"
+                android:fontFamily="@font/monts_reg"
+                android:gravity="start"
+                android:text="JetFlix"
+                android:textColor="@color/colorWhite"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/three_dots"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:layout_weight="0.9"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/opensans_reg"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="@string/vertical_ellipsis"
+                android:textColor="@color/colorWhite"
+                android:textSize="25sp" />
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -39,4 +64,5 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

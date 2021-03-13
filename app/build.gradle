@@ -37,6 +37,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:21.4.0'
     implementation 'androidx.wear:wear:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.google.firebase:firebase-auth:20.0.3'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -59,5 +60,6 @@ dependencies {
     // Slugify
     implementation 'com.github.imangazalievm:slugify:1.0.0'
 
-
+    // GMS
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
 }

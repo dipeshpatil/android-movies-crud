@@ -1,36 +1,37 @@
 package io.github.dipeshpatil.androidcrud;
 
-import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.EditText;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.imangazaliev.slugify.Slugify;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import io.github.dipeshpatil.androidcrud.Movies.Movie;
 import io.github.dipeshpatil.androidcrud.Movies.MovieItem;
 import io.github.dipeshpatil.androidcrud.MoviesList.MoviesListAdapter;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String API_KEY = "e2716675";
+    private FirebaseAuth auth;
+    private TextView threeDots;
+    private GoogleSignInClient mGoogleSignInClient;
+
     private FirebaseFirestore db;
     private DatabaseHelper databaseHelper;
 
@@ -39,18 +40,72 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        auth = FirebaseAuth.getInstance();
+
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
         db = FirebaseFirestore.getInstance();
         databaseHelper = new DatabaseHelper(this);
 
-        EditText movieTitle = findViewById(R.id.movie_title);
-        Button fetchButton = findViewById(R.id.fetch_button);
+        if (databaseHelper.getCount() == 0)
+            buildUpOfflineBase(db, auth, databaseHelper);
+        else restoreBackups();
 
-        ProgressDialog dataDialog = new ProgressDialog(this);
-        dataDialog.setMessage("Fetching");
-        dataDialog.setCanceledOnTouchOutside(false);
+        restoreBackups();
 
-        String URL = "https://www.omdbapi.com/?apikey=" + API_KEY + "&t=";
+        threeDots = findViewById(R.id.three_dots);
+        threeDots.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(this, threeDots);
+            popupMenu.inflate(R.menu.main_menu);
+            popupMenu.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.add_movie:
+                        startActivity(new Intent(MainActivity.this, AddMovieActivity.class));
+                        return true;
+                    case R.id.dashboard:
+                        startActivity(new Intent(MainActivity.this, DashboardActivity.class));
+                        return true;
+                    case R.id.signout:
+                        signOutFromAll();
+                        return true;
+                    default:
+                        return false;
+                }
+            });
+            popupMenu.show();
+        });
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        restoreBackups();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        restoreBackups();
+    }
+
+    private void signOutFromAll() {
+        auth.signOut();
+        mGoogleSignInClient.signOut().addOnCompleteListener(task -> sendToLogin());
+    }
+
+    private void sendToLogin() {
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        finish();
+    }
+
+    private void restoreBackups() {
         List<MovieItem> moviesList = new ArrayList<>();
         Cursor data = databaseHelper.getAllData();
 
@@ -68,96 +123,64 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setHasFixedSize(true);
             recyclerView.setAdapter(adapter);
         }
+    }
 
-        fetchButton.setOnClickListener(v -> {
-            dataDialog.show();
-            String title = movieTitle.getText().toString();
-            String requestURL = URL + URLEncoder.encode(title);
-            StringRequest request = new StringRequest(requestURL,
-                    response -> {
-                        Log.d("VOLLEY_RESPONSE", response);
-                        GsonBuilder builder = new GsonBuilder();
-                        Gson gson = builder.create();
-                        Movie movie = gson.fromJson(response, Movie.class);
+    private void buildUpOfflineBase(
+            FirebaseFirestore db,
+            FirebaseAuth auth,
+            DatabaseHelper databaseHelper) {
+        db.collection(auth.getCurrentUser().getUid())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot document = task.getResult();
+                        List<DocumentSnapshot> moviesList = document.getDocuments();
+                        boolean flag = true;
+                        for (DocumentSnapshot d : moviesList) {
+                            String title_slug = d.getString("title_slug");
 
-                        if (movie.getResponse().equals("True")) {
-                            String movieTitleText = movie.getTitle();
-                            String moviePlotText = movie.getPlot();
-                            String movieRatingText = movie.getImdbRating();
-                            String moviePosterURL = movie.getPoster();
-                            String movieGenreText = movie.getGenre();
-                            String movieYearText = movie.getYear();
-                            String movieReleased = movie.getReleased();
-                            String movieActors = movie.getActors();
-                            String movieDirector = movie.getDirector();
+                            if (!databaseHelper.alreadyExists(title_slug)) {
+                                String title = d.getString("title");
+                                String plot = d.getString("plot");
+                                String rating = d.getString("rating");
+                                String poster = d.getString("poster");
+                                String genre = d.getString("genre");
+                                String year = d.getString("year");
+                                String released = d.getString("released");
+                                String actors = d.getString("actors");
+                                String directors = d.getString("directors");
 
-                            moviesList.add(
-                                    new MovieItem(
-                                            movieTitleText,
-                                            moviePosterURL,
-                                            moviePlotText
-                                    )
-                            );
+                                boolean success = databaseHelper.insertData(
+                                        title,
+                                        plot,
+                                        rating,
+                                        poster,
+                                        genre,
+                                        year,
+                                        released,
+                                        actors,
+                                        directors,
+                                        title_slug
+                                );
 
-                            Slugify slugify = new Slugify();
-                            String title_slug = slugify.slugify(movieTitleText.toLowerCase());
-
-                            Map<String, Object> movieMap = new HashMap<>();
-                            movieMap.put("title_slug", title_slug);
-                            movieMap.put("title", movieTitleText);
-                            movieMap.put("plot", moviePlotText);
-                            movieMap.put("rating", movieRatingText);
-                            movieMap.put("poster", moviePosterURL);
-                            movieMap.put("genre", movieGenreText);
-                            movieMap.put("year", movieYearText);
-                            movieMap.put("released", movieReleased);
-                            movieMap.put("actors", movieActors);
-                            movieMap.put("directors", movieDirector);
-
-                            db.collection("movies")
-                                    .document(title_slug)
-                                    .set(movieMap)
-                                    .addOnSuccessListener(
-                                            documentReference -> {
-                                                if (!databaseHelper.alreadyExists(title_slug)) {
-                                                    boolean success = databaseHelper.insertData(
-                                                            movieTitleText,
-                                                            moviePlotText,
-                                                            movieRatingText,
-                                                            moviePosterURL,
-                                                            movieGenreText,
-                                                            movieYearText,
-                                                            movieReleased,
-                                                            movieActors,
-                                                            movieDirector,
-                                                            title_slug
-                                                    );
-                                                    if (success)
-                                                        Toast.makeText(MainActivity.this, "Success!", Toast.LENGTH_SHORT).show();
-                                                    else
-                                                        Toast.makeText(MainActivity.this, "SQLite Failed!", Toast.LENGTH_LONG).show();
-                                                } else
-                                                    Toast.makeText(MainActivity.this, "Already Exists!", Toast.LENGTH_SHORT).show();
-                                                dataDialog.dismiss();
-                                                movieTitle.setText("");
-                                            }
-                                    )
-                                    .addOnFailureListener(
-                                            e -> Toast.makeText(MainActivity.this, "Failed", Toast.LENGTH_SHORT).show()
-                                    );
-                        } else {
-                            Toast.makeText(this, "Not Found!", Toast.LENGTH_SHORT).show();
-                            dataDialog.dismiss();
+                                flag = flag && success;
+                            }
                         }
-                    },
-                    error -> {
-                        Log.d("VOLLEY_ERROR", error.toString());
-                        dataDialog.hide();
-                    }
-            );
 
-            RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-            queue.add(request);
-        });
+                        if (flag)
+                            Toast.makeText(
+                                    this,
+                                    "Backup Success!",
+                                    Toast.LENGTH_LONG
+                            ).show();
+                        else
+                            Toast.makeText(
+                                    this,
+                                    "Backup Failed!",
+                                    Toast.LENGTH_LONG
+                            ).show();
+                    }
+                });
+        restoreBackups();
     }
 }

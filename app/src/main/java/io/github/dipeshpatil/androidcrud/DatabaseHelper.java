@@ -51,6 +51,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
+    public int getCount() {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        return sqLiteDatabase.rawQuery(
+                "SELECT * FROM " + TABLE_NAME,
+                null
+        ).getCount();
+    }
+
     public boolean insertData(
             String title,
             String plot,
