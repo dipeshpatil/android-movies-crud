@@ -7,6 +7,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+    public static final int BY_ID_ASC = 0;
+    public static final int BY_ID_DESC = 1;
+    public static final int BY_TITLE_ASC = 2;
+    public static final int BY_TITLE_DESC = 3;
+    public static final int BY_RATING_ASC = 4;
+    public static final int BY_RATING_DESC = 5;
+    public static final int BY_YEAR_ASC = 6;
+    public static final int BY_YEAR_DESC = 7;
+
     public static final String DB_NAME = "Movies.db";
     public static final String TABLE_NAME = "movies";
     public static final String COL_1 = "ID";
@@ -99,10 +108,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getAllData() {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        return sqLiteDatabase.rawQuery(
-                "SELECT * FROM " + TABLE_NAME + " ORDER BY ID DESC",
-                null
-        );
+        String QUERY = "SELECT * FROM " + TABLE_NAME;
+        return sqLiteDatabase.rawQuery(QUERY, null);
+    }
+
+    public Cursor getAllData(int choice) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        String QUERY = "SELECT * FROM " + TABLE_NAME;
+
+        switch (choice) {
+            case BY_ID_ASC:
+                QUERY += " ORDER BY " + COL_1 + " ASC";
+                break;
+            case BY_ID_DESC:
+                QUERY += " ORDER BY " + COL_1 + " DESC";
+                break;
+            case BY_TITLE_ASC:
+                QUERY += " ORDER BY " + COL_2 + " ASC";
+                break;
+            case BY_TITLE_DESC:
+                QUERY += " ORDER BY " + COL_2 + " DESC";
+                break;
+            case BY_RATING_ASC:
+                QUERY += " ORDER BY " + COL_4 + " ASC";
+                break;
+            case BY_RATING_DESC:
+                QUERY += " ORDER BY " + COL_4 + " DESC";
+                break;
+            case BY_YEAR_ASC:
+                QUERY += " ORDER BY " + COL_7 + " ASC";
+                break;
+            case BY_YEAR_DESC:
+                QUERY += " ORDER BY " + COL_7 + " DESC";
+        }
+
+        return sqLiteDatabase.rawQuery(QUERY, null);
     }
 
     public Cursor getDataFromTitleSlug(String title_slug) {

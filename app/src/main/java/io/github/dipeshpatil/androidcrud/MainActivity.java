@@ -3,14 +3,11 @@ package io.github.dipeshpatil.androidcrud;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -56,9 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (databaseHelper.getCount() == 0)
             buildUpOfflineBase(db, auth, databaseHelper);
-        else restoreBackups();
 
-        restoreBackups();
+        loadFromSQLite();
 
         threeDots = findViewById(R.id.three_dots);
         threeDots.setOnClickListener(v -> {
@@ -86,13 +82,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        restoreBackups();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        restoreBackups();
+        loadFromSQLite();
     }
 
     private void signOutFromAll() {
@@ -105,9 +95,9 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    private void restoreBackups() {
+    private void loadFromSQLite() {
         List<MovieItem> moviesList = new ArrayList<>();
-        Cursor data = databaseHelper.getAllData();
+        Cursor data = databaseHelper.getAllData(DatabaseHelper.BY_YEAR_DESC);
 
         if (data.getCount() != 0) {
             while (data.moveToNext()) {
@@ -181,6 +171,6 @@ public class MainActivity extends AppCompatActivity {
                             ).show();
                     }
                 });
-        restoreBackups();
+        loadFromSQLite();
     }
 }

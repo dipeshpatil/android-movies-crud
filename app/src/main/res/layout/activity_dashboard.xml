@@ -17,22 +17,96 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:background="@color/colorDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorDark"
             android:fontFamily="@font/opensans_reg"
-            android:text="Dashboard"
-            android:textColor="@color/colorLight"
             android:padding="12dp"
             android:paddingTop="4dp"
+            android:text="Dashboard"
+            android:textColor="@color/colorLight"
             android:textSize="25sp" />
+
+        <RadioGroup
+            android:id="@+id/radio_group_column"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radio_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="ID" />
+
+            <RadioButton
+                android:id="@+id/radio_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Title" />
+
+            <RadioButton
+                android:id="@+id/radio_rating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Rating" />
+
+            <RadioButton
+                android:id="@+id/radio_year"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Year" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <RadioGroup
+                android:id="@+id/radio_group_order"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radio_asc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="ASC" />
+
+                <RadioButton
+                    android:id="@+id/radio_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="DESC" />
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/dashboard_fetch_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/colorSuccess"
+                android:text="Fetch"
+                android:textColor="@color/colorWhite" />
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/dashboard_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
             android:background="@color/colorDark"
+            android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
