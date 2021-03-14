@@ -5,12 +5,32 @@ public class MovieItem {
     private String poster;
     private String plot;
     private String genre;
+    private String rating;
+    private String year;
 
-    public MovieItem(String title, String poster, String plot, String genre) {
+    public MovieItem(String title, String poster, String plot, String genre, String rating, String year) {
         this.title = title;
         this.poster = poster;
         this.plot = plot;
         this.genre = genre;
+        this.rating = rating;
+        this.year = year;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
     }
 
     public String getGenre() {

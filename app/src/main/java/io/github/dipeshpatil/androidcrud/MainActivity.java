@@ -21,8 +21,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.dipeshpatil.androidcrud.Helpers.DatabaseHelper;
 import io.github.dipeshpatil.androidcrud.Movies.MovieItem;
-import io.github.dipeshpatil.androidcrud.MoviesList.MoviesListAdapter;
+import io.github.dipeshpatil.androidcrud.Adapters.MoviesListAdapter;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth auth;
@@ -105,7 +106,9 @@ public class MainActivity extends AppCompatActivity {
                         data.getString(1),
                         data.getString(4),
                         data.getString(2),
-                        data.getString(5)
+                        data.getString(5),
+                        data.getString(3),
+                        data.getString(6)
                 ));
             }
 

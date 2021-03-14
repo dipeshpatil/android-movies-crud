@@ -13,6 +13,8 @@ import com.google.android.material.chip.ChipGroup;
 import com.squareup.picasso.Picasso;
 import com.theophrast.ui.widget.SquareImageView;
 
+import io.github.dipeshpatil.androidcrud.Helpers.DatabaseHelper;
+
 public class DetailActivity extends AppCompatActivity {
 
     private TextView detailMovieTitle, detailMoviePlot;

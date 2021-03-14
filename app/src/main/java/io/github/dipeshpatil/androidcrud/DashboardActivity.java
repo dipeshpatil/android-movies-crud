@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.github.dipeshpatil.androidcrud.Adapters.DashboardAdapter;
+import io.github.dipeshpatil.androidcrud.Helpers.DatabaseHelper;
 import io.github.dipeshpatil.androidcrud.Movies.MovieItem;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -23,6 +24,9 @@ public class DashboardActivity extends AppCompatActivity {
 
     private RadioGroup radioGroupColumn, radioGroupOrder;
     private RadioButton radioButtonColumn, radioButtonOrder;
+
+    private Cursor data;
+    private List<MovieItem> list;
 
     private static final HashMap<String, Integer> map = new HashMap<>();
 
@@ -50,6 +54,27 @@ public class DashboardActivity extends AppCompatActivity {
 
         Button fetchButton = findViewById(R.id.dashboard_fetch_btn);
 
+        data = databaseHelper.getAllData(DatabaseHelper.BY_ID_DESC);
+        list = new ArrayList<>();
+
+        if (data.getCount() != 0) {
+            while (data.moveToNext()) {
+                MovieItem item = new MovieItem(
+                        data.getString(1),
+                        data.getString(4),
+                        data.getString(2),
+                        data.getString(5),
+                        data.getString(3),
+                        data.getString(6)
+                );
+                list.add(item);
+            }
+        }
+
+        DashboardAdapter adapter = new DashboardAdapter(list);
+        dashboardRecyclerView.setHasFixedSize(true);
+        dashboardRecyclerView.setAdapter(adapter);
+
         fetchButton.setOnClickListener(v -> {
             int columnID = radioGroupColumn.getCheckedRadioButtonId();
             int orderID = radioGroupOrder.getCheckedRadioButtonId();
@@ -63,9 +88,8 @@ public class DashboardActivity extends AppCompatActivity {
                 String column = radioButtonColumn.getText().toString();
                 String order = radioButtonOrder.getText().toString();
 
-                Cursor data = databaseHelper.getAllData(getValue(column + order));
-
-                List<MovieItem> list = new ArrayList<>();
+                data = databaseHelper.getAllData(getValue(column + order));
+                list.clear();
 
                 if (data.getCount() != 0) {
                     while (data.moveToNext()) {
@@ -73,15 +97,14 @@ public class DashboardActivity extends AppCompatActivity {
                                 data.getString(1),
                                 data.getString(4),
                                 data.getString(2),
-                                data.getString(5)
+                                data.getString(5),
+                                data.getString(3),
+                                data.getString(6)
                         );
                         list.add(item);
                     }
                 }
 
-                DashboardAdapter adapter = new DashboardAdapter(list);
-                dashboardRecyclerView.setAdapter(adapter);
-                dashboardRecyclerView.setHasFixedSize(true);
                 dashboardRecyclerView.setAdapter(adapter);
             }
         });

@@ -1,4 +1,4 @@
-package io.github.dipeshpatil.androidcrud;
+package io.github.dipeshpatil.androidcrud.Helpers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -151,6 +151,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "SELECT * FROM " + TABLE_NAME + " WHERE title = ?",
                 new String[]{title}
         );
+    }
+
+    public boolean deleteDataByTitle(String title) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.delete(
+                TABLE_NAME,
+                COL_2 + " = ?",
+                new String[]{title}
+        );
+        return true;
     }
 
     public boolean alreadyExists(String title_slug) {

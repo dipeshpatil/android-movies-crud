@@ -28,6 +28,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.github.dipeshpatil.androidcrud.Helpers.DatabaseHelper;
 import io.github.dipeshpatil.androidcrud.Movies.Movie;
 
 public class AddMovieActivity extends AppCompatActivity {
@@ -139,7 +140,7 @@ public class AddMovieActivity extends AppCompatActivity {
         });
 
         resultButtonAdd.setOnClickListener(v -> {
-            dataDialog.setMessage("Adding");
+            dataDialog.setMessage("Fetching");
             dataDialog.setCanceledOnTouchOutside(false);
 
             db.collection(currentUserUID)
@@ -171,6 +172,7 @@ public class AddMovieActivity extends AppCompatActivity {
                 Toast.makeText(this, "Failed to Add!", Toast.LENGTH_SHORT).show();
                 dataDialog.hide();
             });
+            addMovieTitle.setText("");
         });
     }
 }

@@ -28,6 +28,7 @@
             android:textSize="25sp" />
 
         <RadioGroup
+            android:paddingHorizontal="8dp"
             android:id="@+id/radio_group_column"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,31 +39,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="ID" />
+                android:text="ID"
+                android:textColor="@color/colorLight" />
 
             <RadioButton
                 android:id="@+id/radio_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Title" />
+                android:text="Title"
+                android:textColor="@color/colorLight" />
 
             <RadioButton
                 android:id="@+id/radio_rating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Rating" />
+                android:text="Rating"
+                android:textColor="@color/colorLight" />
 
             <RadioButton
                 android:id="@+id/radio_year"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Year" />
+                android:text="Year"
+                android:textColor="@color/colorLight" />
         </RadioGroup>
 
         <LinearLayout
+            android:paddingHorizontal="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -80,22 +86,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="ASC" />
+                    android:text="ASC"
+                    android:textColor="@color/colorLight" />
 
                 <RadioButton
                     android:id="@+id/radio_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="DESC" />
+                    android:text="DESC"
+                    android:textColor="@color/colorLight" />
             </RadioGroup>
 
             <Button
+                android:layout_marginHorizontal="8dp"
                 android:id="@+id/dashboard_fetch_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="@color/colorSuccess"
+                android:backgroundTint="@color/colorPrimary"
                 android:text="Fetch"
                 android:textColor="@color/colorWhite" />
 

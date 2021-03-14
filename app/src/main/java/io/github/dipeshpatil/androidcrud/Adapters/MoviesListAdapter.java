@@ -1,7 +1,6 @@
-package io.github.dipeshpatil.androidcrud.MoviesList;
+package io.github.dipeshpatil.androidcrud.Adapters;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +9,11 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 import com.squareup.picasso.Picasso;
 import com.theophrast.ui.widget.SquareImageView;
 
 import java.util.List;
 
-import io.github.dipeshpatil.androidcrud.DatabaseHelper;
 import io.github.dipeshpatil.androidcrud.DetailActivity;
 import io.github.dipeshpatil.androidcrud.Movies.MovieItem;
 import io.github.dipeshpatil.androidcrud.R;

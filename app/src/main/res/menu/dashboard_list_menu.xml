@@ -5,5 +5,5 @@
         android:title="View" />
     <item
         android:id="@+id/dashboard_share"
-        android:title="Share" />
+        android:title="Share on Whatsapp" />
 </menu>
