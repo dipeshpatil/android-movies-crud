@@ -104,7 +104,8 @@ public class MainActivity extends AppCompatActivity {
                 moviesList.add(new MovieItem(
                         data.getString(1),
                         data.getString(4),
-                        data.getString(2)
+                        data.getString(2),
+                        data.getString(5)
                 ));
             }
 

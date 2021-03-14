@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBlack"
     tools:context=".DetailActivity">
 
     <LinearLayout
@@ -11,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_weight="0.75"
         android:orientation="vertical"
-        android:padding="12dp"
+        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -20,8 +21,8 @@
 
         <com.theophrast.ui.widget.SquareImageView
             android:id="@+id/detail_movie_poster"
-            android:layout_width="257dp"
-            android:layout_height="171dp"
+            android:layout_width="203dp"
+            android:layout_height="304dp"
             android:layout_gravity="center"
             android:layout_weight="0.25"
             android:scaleType="fitCenter"
@@ -33,16 +34,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Title"
-            android:gravity="center"
-            android:textSize="30dp" />
+            android:padding="8dp"
+            android:fontFamily="@font/monts_reg"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/colorWhite"
+            android:textSize="25dp" />
 
         <TextView
             android:id="@+id/detail_movie_plot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Movie Plot"
-            android:gravity="center"
+            android:fontFamily="@font/opensans_reg"
+            android:padding="2dp"
+            android:textColor="@color/colorLight"
             android:textSize="18sp" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="match_parent"
+            android:id="@+id/detail_chip_group"
+            android:layout_height="wrap_content">
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <LinearLayout
+            android:id="@+id/detail_movie_share"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

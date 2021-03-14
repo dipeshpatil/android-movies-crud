@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.squareup.picasso.Picasso;
 import com.theophrast.ui.widget.SquareImageView;
 
@@ -22,7 +24,7 @@ import io.github.dipeshpatil.androidcrud.R;
 
 public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.ViewHolder> {
     private List<MovieItem> list;
-    private DatabaseHelper databaseHelper;
+//    private DatabaseHelper databaseHelper;
 
     public MoviesListAdapter(List<MovieItem> list) {
         this.list = list;
@@ -42,19 +44,9 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
         holder.plotView.setText(list.get(position).getPlot());
         Picasso.get().load(list.get(position).getPoster()).into(holder.posterView);
 
-        databaseHelper = new DatabaseHelper(holder.titleView.getContext());
-
         holder.viewButton.setOnClickListener(v -> {
-            Cursor cursor = databaseHelper.getAllDataByTitle(list.get(position).getTitle());
             Intent detailsIntent = new Intent(holder.titleView.getContext(), DetailActivity.class);
-
-            while (cursor.moveToFirst()) {
-                detailsIntent.putExtra("title", cursor.getString(1));
-                detailsIntent.putExtra("plot", cursor.getString(2));
-                detailsIntent.putExtra("poster", cursor.getString(4));
-                break;
-            }
-
+            detailsIntent.putExtra("title", list.get(position).getTitle());
             holder.titleView.getContext().startActivity(detailsIntent);
         });
     }

@@ -4,11 +4,21 @@ public class MovieItem {
     private String title;
     private String poster;
     private String plot;
+    private String genre;
 
-    public MovieItem(String title, String poster, String plot) {
+    public MovieItem(String title, String poster, String plot, String genre) {
         this.title = title;
         this.poster = poster;
         this.plot = plot;
+        this.genre = genre;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
     public String getTitle() {

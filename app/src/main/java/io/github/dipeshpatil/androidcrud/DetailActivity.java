@@ -2,36 +2,64 @@
 
 package io.github.dipeshpatil.androidcrud;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.squareup.picasso.Picasso;
 import com.theophrast.ui.widget.SquareImageView;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private TextView detailMovieTitle;
-    private TextView detailMoviePlot;
+    private TextView detailMovieTitle, detailMoviePlot;
     private SquareImageView detailMoviePoster;
+
+    private DatabaseHelper databaseHelper;
+    private ChipGroup chipGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        databaseHelper = new DatabaseHelper(this);
+
         detailMoviePlot = findViewById(R.id.detail_movie_plot);
         detailMovieTitle = findViewById(R.id.detail_movie_title);
         detailMoviePoster = findViewById(R.id.detail_movie_poster);
 
+        chipGroup = findViewById(R.id.detail_chip_group);
+
         String title = getIntent().getStringExtra("title");
-        String plot = getIntent().getStringExtra("plot");
-        String poster = getIntent().getStringExtra("poster");
+
+        Cursor data = databaseHelper.getDataByTitle(title);
+
+        data.moveToFirst();
+        String moviePlot = data.getString(2);
+        String moviePoster = data.getString(4);
+        String movieYear = data.getString(6);
+        String[] genreArray = data.getString(5).split(",");
 
         detailMovieTitle.setText(title);
-        detailMoviePlot.setText(plot);
+        detailMoviePlot.setText(moviePlot);
+        Picasso.get().load(moviePoster).into(detailMoviePoster);
 
-        Picasso.get().load(poster).into(detailMoviePoster);
+        Chip chip = new Chip(this);
+        chip.setText(movieYear);
+        chip.setChipBackgroundColorResource(R.color.colorDanger);
+        chip.setTextColor(getResources().getColor(R.color.colorLight));
+        chipGroup.addView(chip);
+
+        for (String genre : genreArray) {
+            Chip genreChip = new Chip(this);
+            genreChip.setText(genre.trim());
+            genreChip.setChipBackgroundColorResource(R.color.colorWarning);
+            genreChip.setTextColor(getResources().getColor(R.color.colorLight));
+            chipGroup.addView(genreChip);
+        }
     }
 }
