@@ -19,6 +19,7 @@
     <color name="colorWarning">#5f27cd</color>
     <color name="colorSuccess">#10ac84</color>
     <color name="colorInfo">#38ada9</color>
+    <color name="colorAmber">#f1c40f</color>
 
     <color name="colorBlack">#FF000000</color>
     <color name="colorWhite">#FFFFFFFF</color>

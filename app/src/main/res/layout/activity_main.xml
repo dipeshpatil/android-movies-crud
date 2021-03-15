@@ -7,6 +7,17 @@
     android:background="@color/colorBlack"
     tools:context=".MainActivity">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_floating_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/colorAmber"
+        android:src="@drawable/ic_baseline_add_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/linear_layout" />
+
     <LinearLayout
         android:id="@+id/linear_layout"
         android:layout_width="match_parent"
@@ -22,9 +33,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorDark"
             android:orientation="horizontal"
             android:padding="12dp"
-            android:background="@color/colorDark"
             android:weightSum="1">
 
             <TextView
@@ -49,10 +60,10 @@
                 android:focusable="true"
                 android:fontFamily="@font/opensans_reg"
                 android:gravity="center"
-                android:textStyle="bold"
                 android:text="@string/vertical_ellipsis"
                 android:textColor="@color/colorWhite"
-                android:textSize="25sp" />
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 

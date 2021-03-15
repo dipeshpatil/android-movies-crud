@@ -90,8 +90,9 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.View
                                     list.remove(position);
                                     notifyItemRemoved(position);
                                     notifyItemRangeChanged(position, list.size());
-                                    deleteFromFirestore(title);
-                                    Toast.makeText(context, title + " Deleted", Toast.LENGTH_SHORT).show();
+                                    if (deleteFromFirestore(title)) {
+                                        Toast.makeText(context, title + " Deleted", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
                     ).show();
