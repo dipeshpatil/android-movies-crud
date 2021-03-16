@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import androidx.annotation.NonNull;
+
+import io.github.dipeshpatil.androidcrud.Movies.MovieItem;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final int BY_ID_ASC = 0;
     public static final int BY_ID_DESC = 1;
@@ -68,6 +72,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ).getCount();
     }
 
+    public boolean insertData(@NonNull MovieItem item) {
+        return insertData(
+                item.getTitle(),
+                item.getPlot(),
+                item.getRating(),
+                item.getPoster(),
+                item.getGenre(),
+                item.getYear(),
+                item.getReleased(),
+                item.getActors(),
+                item.getDirectors(),
+                item.getTitle_slug()
+        );
+    }
+
     public boolean insertData(
             String title,
             String plot,
@@ -104,12 +123,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return false;
         }
         return true;
-    }
-
-    public Cursor getAllData() {
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        String QUERY = "SELECT * FROM " + TABLE_NAME;
-        return sqLiteDatabase.rawQuery(QUERY, null);
     }
 
     public Cursor getAllData(int choice) {

@@ -128,11 +128,15 @@ public class MainActivity extends AppCompatActivity {
             while (data.moveToNext()) {
                 moviesList.add(new MovieItem(
                         data.getString(1),
-                        data.getString(4),
                         data.getString(2),
-                        data.getString(5),
                         data.getString(3),
-                        data.getString(6)
+                        data.getString(4),
+                        data.getString(5),
+                        data.getString(6),
+                        data.getString(7),
+                        data.getString(8),
+                        data.getString(9),
+                        data.getString(10)
                 ));
             }
 
@@ -151,52 +155,23 @@ public class MainActivity extends AppCompatActivity {
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        QuerySnapshot document = task.getResult();
-                        List<DocumentSnapshot> moviesList = document.getDocuments();
+                        QuerySnapshot snapshots = task.getResult();
+                        List<DocumentSnapshot> moviesList = snapshots.getDocuments();
                         boolean flag = true;
+
                         for (DocumentSnapshot d : moviesList) {
                             String title_slug = d.getString("title_slug");
-
+                            MovieItem item = d.toObject(MovieItem.class);
                             if (!databaseHelper.alreadyExists(title_slug)) {
-                                String title = d.getString("title");
-                                String plot = d.getString("plot");
-                                String rating = d.getString("rating");
-                                String poster = d.getString("poster");
-                                String genre = d.getString("genre");
-                                String year = d.getString("year");
-                                String released = d.getString("released");
-                                String actors = d.getString("actors");
-                                String directors = d.getString("directors");
-
-                                boolean success = databaseHelper.insertData(
-                                        title,
-                                        plot,
-                                        rating,
-                                        poster,
-                                        genre,
-                                        year,
-                                        released,
-                                        actors,
-                                        directors,
-                                        title_slug
-                                );
-
+                                boolean success = databaseHelper.insertData(item);
                                 flag = flag && success;
                             }
                         }
 
-                        if (flag)
-                            Toast.makeText(
-                                    this,
-                                    "Backup Success!",
-                                    Toast.LENGTH_LONG
-                            ).show();
-                        else
-                            Toast.makeText(
-                                    this,
-                                    "Backup Failed!",
-                                    Toast.LENGTH_LONG
-                            ).show();
+                        Toast.makeText(this,
+                                flag ? "Backup Success, Restart the Application" : "Backup Failed!",
+                                Toast.LENGTH_LONG
+                        ).show();
                     }
                 });
         loadFromSQLite();
@@ -239,7 +214,6 @@ public class MainActivity extends AppCompatActivity {
                             Movie movie = gson.fromJson(response, Movie.class);
 
                             if (movie.getResponse().equals("True")) {
-
                                 String movieTitleText = movie.getTitle();
                                 String moviePlotText = movie.getPlot();
                                 String movieRatingText = movie.getImdbRating();
@@ -268,16 +242,11 @@ public class MainActivity extends AppCompatActivity {
                                 dialogMoviePlot.setText(moviePlotText);
                                 Picasso.get().load(moviePosterURL).into(dialogPosterView);
                                 layout.setVisibility(View.VISIBLE);
-
-                            } else {
+                            } else
                                 Toast.makeText(this, "Not Found!", Toast.LENGTH_SHORT).show();
-                            }
                         },
-                        error -> {
-                            Log.d("VOLLEY_ERROR", error.toString());
-                        }
+                        error -> Log.d("VOLLEY_ERROR", error.toString())
                 );
-
                 RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
                 queue.add(request);
             });
@@ -306,14 +275,9 @@ public class MainActivity extends AppCompatActivity {
                                 if (success) {
                                     loadFromSQLite();
                                     dialog.dismiss();
-                                    Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
-                                } else
-                                    Toast.makeText(this, "SQLite Failed!", Toast.LENGTH_LONG).show();
-                            } else
-                                Toast.makeText(this, "Already Exists!", Toast.LENGTH_SHORT).show();
-                        }).addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to Add!", Toast.LENGTH_SHORT).show();
-                });
+                                }
+                            }
+                        });
             });
         });
 

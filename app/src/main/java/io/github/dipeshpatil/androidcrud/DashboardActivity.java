@@ -61,11 +61,15 @@ public class DashboardActivity extends AppCompatActivity {
             while (data.moveToNext()) {
                 MovieItem item = new MovieItem(
                         data.getString(1),
-                        data.getString(4),
                         data.getString(2),
-                        data.getString(5),
                         data.getString(3),
-                        data.getString(6)
+                        data.getString(4),
+                        data.getString(5),
+                        data.getString(6),
+                        data.getString(7),
+                        data.getString(8),
+                        data.getString(9),
+                        data.getString(10)
                 );
                 list.add(item);
             }
@@ -95,11 +99,15 @@ public class DashboardActivity extends AppCompatActivity {
                     while (data.moveToNext()) {
                         MovieItem item = new MovieItem(
                                 data.getString(1),
-                                data.getString(4),
                                 data.getString(2),
-                                data.getString(5),
                                 data.getString(3),
-                                data.getString(6)
+                                data.getString(4),
+                                data.getString(5),
+                                data.getString(6),
+                                data.getString(7),
+                                data.getString(8),
+                                data.getString(9),
+                                data.getString(10)
                         );
                         list.add(item);
                     }
