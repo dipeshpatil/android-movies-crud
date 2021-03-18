@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,6 +41,11 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
             Intent detailsIntent = new Intent(holder.posterView.getContext(), DetailActivity.class);
             detailsIntent.putExtra("title", list.get(position).getTitle());
             holder.posterView.getContext().startActivity(detailsIntent);
+        });
+
+        holder.posterView.setOnLongClickListener(v -> {
+            Toast.makeText(holder.posterView.getContext(), list.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+            return true;
         });
     }
 

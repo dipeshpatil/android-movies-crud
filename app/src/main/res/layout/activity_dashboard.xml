@@ -40,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="ID"
+                android:checked="true"
                 android:textColor="@color/colorLight" />
 
             <RadioButton
@@ -95,6 +96,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="DESC"
+                    android:checked="true"
                     android:textColor="@color/colorLight" />
             </RadioGroup>
 

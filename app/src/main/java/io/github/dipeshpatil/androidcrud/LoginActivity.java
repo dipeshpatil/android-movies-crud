@@ -48,15 +48,21 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = auth.getCurrentUser();
 
-        if (currentUser == null)
+        if (currentUser == null) {
+            signOutFromAll();
             Toast.makeText(this, "Please SignIn", Toast.LENGTH_SHORT).show();
-        else
+        } else
             sendToMainActivity();
     }
 
     private void signIn() {
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, 1);
+    }
+
+    private void signOutFromAll() {
+        auth.signOut();
+        googleSignInClient.signOut();
     }
 
     @Override
@@ -90,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                         // If sign in fails, display a message to the user.
                         Log.w("AUTH_LOGIN", "signInWithCredential:failure", task.getException());
                         Toast.makeText(this, "Sign In: Error", Toast.LENGTH_SHORT).show();
+                        signOutFromAll();
                     }
                 });
     }

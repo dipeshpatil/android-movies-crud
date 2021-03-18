@@ -151,7 +151,7 @@ public class AddMovieActivity extends AppCompatActivity {
                     .set(movieMap)
                     .addOnCompleteListener(task -> {
 
-                        if (!databaseHelper.alreadyExists(movieMap.get("title_slug").toString())) {
+                        if (!databaseHelper.alreadyExists(movieMap.get("title_slug").toString(), currentUserUID)) {
                             boolean success = databaseHelper.insertData(
                                     movieMap.get("title").toString(),
                                     movieMap.get("plot").toString(),

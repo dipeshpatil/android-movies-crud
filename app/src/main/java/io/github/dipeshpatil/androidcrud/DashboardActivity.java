@@ -10,6 +10,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +29,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private Cursor data;
     private List<MovieItem> list;
+    private FirebaseAuth auth;
 
     private static final HashMap<String, Integer> map = new HashMap<>();
 
@@ -46,6 +49,8 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        auth = FirebaseAuth.getInstance();
+
         databaseHelper = new DatabaseHelper(this);
         dashboardRecyclerView = findViewById(R.id.dashboard_recycler_view);
 
@@ -54,7 +59,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         Button fetchButton = findViewById(R.id.dashboard_fetch_btn);
 
-        data = databaseHelper.getAllData(DatabaseHelper.BY_ID_DESC);
+        data = databaseHelper.getAllData(DatabaseHelper.BY_ID_DESC, auth.getCurrentUser().getUid());
         list = new ArrayList<>();
 
         if (data.getCount() != 0) {
@@ -92,7 +97,7 @@ public class DashboardActivity extends AppCompatActivity {
                 String column = radioButtonColumn.getText().toString();
                 String order = radioButtonOrder.getText().toString();
 
-                data = databaseHelper.getAllData(getValue(column + order));
+                data = databaseHelper.getAllData(getValue(column + order), auth.getCurrentUser().getUid());
                 list.clear();
 
                 if (data.getCount() != 0) {

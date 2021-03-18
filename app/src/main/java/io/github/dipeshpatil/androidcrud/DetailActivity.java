@@ -1,5 +1,3 @@
-
-
 package io.github.dipeshpatil.androidcrud;
 
 import android.database.Cursor;
@@ -44,6 +42,7 @@ public class DetailActivity extends AppCompatActivity {
         String moviePlot = data.getString(2);
         String moviePoster = data.getString(4);
         String movieYear = data.getString(6);
+        String movieRating = data.getString(3);
         String[] genreArray = data.getString(5).split(",");
 
         detailMovieTitle.setText(title);
@@ -53,6 +52,12 @@ public class DetailActivity extends AppCompatActivity {
         Chip chip = new Chip(this);
         chip.setText(movieYear);
         chip.setChipBackgroundColorResource(R.color.colorDanger);
+        chip.setTextColor(getResources().getColor(R.color.colorLight));
+        chipGroup.addView(chip);
+
+        chip = new Chip(this);
+        chip.setText(movieRating);
+        chip.setChipBackgroundColorResource(R.color.colorSuccess);
         chip.setTextColor(getResources().getColor(R.color.colorLight));
         chipGroup.addView(chip);
 

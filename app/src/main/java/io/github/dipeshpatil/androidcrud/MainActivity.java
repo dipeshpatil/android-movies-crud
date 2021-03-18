@@ -25,8 +25,6 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -82,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         databaseHelper = new DatabaseHelper(this);
 
-        if (databaseHelper.getCount() == 0)
+        if (databaseHelper.getCount(auth.getCurrentUser().getUid()) == 0)
             buildUpOfflineBase(db, auth, databaseHelper);
 
         loadFromSQLite();
@@ -125,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadFromSQLite() {
         List<MovieItem> moviesList = new ArrayList<>();
-        Cursor data = databaseHelper.getAllData(DatabaseHelper.BY_ID_DESC);
+        Cursor data = databaseHelper.getAllData(DatabaseHelper.BY_ID_DESC, auth.getCurrentUser().getUid());
 
         if (data.getCount() != 0) {
             while (data.moveToNext()) {
@@ -167,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                         for (DocumentSnapshot d : moviesList) {
                             String title_slug = d.getString("title_slug");
                             MovieItem item = d.toObject(MovieItem.class);
-                            if (!databaseHelper.alreadyExists(title_slug)) {
+                            if (!databaseHelper.alreadyExists(title_slug, uid)) {
                                 boolean success = databaseHelper.insertData(item, uid);
                                 flag = flag && success;
                             }
@@ -268,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
                         .set(movieMap)
                         .addOnCompleteListener(task -> {
 
-                            if (!databaseHelper.alreadyExists(movieMap.get("title_slug").toString())) {
+                            if (!databaseHelper.alreadyExists(movieMap.get("title_slug").toString(), currentUserUID)) {
                                 boolean success = databaseHelper.insertData(
                                         movieMap.get("title").toString(),
                                         movieMap.get("plot").toString(),

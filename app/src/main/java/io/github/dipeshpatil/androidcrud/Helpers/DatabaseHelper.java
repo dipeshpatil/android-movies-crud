@@ -66,11 +66,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public int getCount() {
+    public int getCount(String uid) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery(
-                "SELECT * FROM " + TABLE_NAME,
-                null
+                "SELECT * FROM " + TABLE_NAME + " WHERE " + COL_12 + " = ?",
+                new String[]{uid}
         ).getCount();
     }
 
@@ -127,9 +127,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    public Cursor getAllData(int choice) {
+    public Cursor getAllData(int choice, String uid) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        String QUERY = "SELECT * FROM " + TABLE_NAME;
+        String QUERY = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL_12 + " = ? ";
 
         switch (choice) {
             case BY_ID_ASC:
@@ -157,7 +157,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 QUERY += " ORDER BY " + COL_7 + " DESC";
         }
 
-        return sqLiteDatabase.rawQuery(QUERY, null);
+        return sqLiteDatabase.rawQuery(QUERY, new String[]{uid});
     }
 
     public Cursor getDataByTitle(String title) {
@@ -168,21 +168,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
-    public boolean deleteDataByTitle(String title) {
+    public Cursor getDataByFUID(String uid) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        return sqLiteDatabase.rawQuery(
+                "SELECT * FROM " + TABLE_NAME + " WHERE " + COL_12 + " = ?",
+                new String[]{uid}
+        );
+    }
+
+    public boolean deleteDataByTitle(String title, String uid) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         sqLiteDatabase.delete(
                 TABLE_NAME,
-                COL_2 + " = ?",
-                new String[]{title}
+                COL_2 + " = ? AND " + COL_12 + " = ?",
+                new String[]{title, uid}
         );
         return true;
     }
 
-    public boolean alreadyExists(String title_slug) {
+    public boolean alreadyExists(String title_slug, String uid) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery(
-                "SELECT title_slug FROM " + TABLE_NAME + " WHERE title_slug = ?",
-                new String[]{title_slug}
+                "SELECT title_slug FROM " + TABLE_NAME + " WHERE " + COL_11 + " = ? AND " + COL_12 + " = ?",
+                new String[]{title_slug, uid}
         ).getCount() != 0;
     }
 

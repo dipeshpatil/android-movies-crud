@@ -62,7 +62,6 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.View
                         return true;
                     case R.id.dashboard_share:
                         share(context, title, rating, year);
-                        Toast.makeText(context, title + " Shared", Toast.LENGTH_SHORT).show();
                         return true;
                     default:
                         return false;
@@ -75,6 +74,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.View
             Context context = holder.deleteButton.getContext();
             String title = list.get(position).getTitle();
             databaseHelper = new DatabaseHelper(context);
+            auth = FirebaseAuth.getInstance();
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
             builder.setTitle("Delete")
                     .setMessage("Are you sure you want to delete " + title + " ?")
@@ -86,7 +86,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.View
                     .setPositiveButton(
                             "Delete",
                             (dialog, which) -> {
-                                if (databaseHelper.deleteDataByTitle(title)) {
+                                if (databaseHelper.deleteDataByTitle(title, auth.getCurrentUser().getUid())) {
                                     list.remove(position);
                                     notifyItemRemoved(position);
                                     notifyItemRangeChanged(position, list.size());
