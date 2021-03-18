@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.RequestQueue;
@@ -24,6 +25,8 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -143,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
             RecyclerView recyclerView = findViewById(R.id.recyclerView);
             MoviesListAdapter adapter = new MoviesListAdapter(moviesList);
             recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
             recyclerView.setAdapter(adapter);
         }
     }
@@ -151,7 +155,8 @@ public class MainActivity extends AppCompatActivity {
             FirebaseFirestore db,
             FirebaseAuth auth,
             DatabaseHelper databaseHelper) {
-        db.collection(auth.getCurrentUser().getUid())
+        final String uid = auth.getCurrentUser().getUid();
+        db.collection(uid)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -163,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                             String title_slug = d.getString("title_slug");
                             MovieItem item = d.toObject(MovieItem.class);
                             if (!databaseHelper.alreadyExists(title_slug)) {
-                                boolean success = databaseHelper.insertData(item);
+                                boolean success = databaseHelper.insertData(item, uid);
                                 flag = flag && success;
                             }
                         }
@@ -202,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
                 TextView dialogMovieTitle = dialog.findViewById(R.id.result_movie_name_dialog);
                 TextView dialogMoviePlot = dialog.findViewById(R.id.result_movie_plot_dialog);
                 SquareImageView dialogPosterView = dialog.findViewById(R.id.result_movie_poster_dialog);
+                TextView dialogMovieGenre = dialog.findViewById(R.id.result_movie_genre_dialog);
 
                 String title = dialogMovieEditText.getText().toString();
 
@@ -239,8 +245,11 @@ public class MainActivity extends AppCompatActivity {
                                 movieMap.put("directors", movieDirector);
 
                                 dialogMovieTitle.setText(movieTitleText);
-                                dialogMoviePlot.setText(moviePlotText);
+                                dialogMoviePlot.setText(moviePlotText.length() > 121 ? moviePlotText.substring(0, 115) + "..." : moviePlotText);
+                                dialogMovieGenre.setText(movieGenreText);
+
                                 Picasso.get().load(moviePosterURL).into(dialogPosterView);
+
                                 layout.setVisibility(View.VISIBLE);
                             } else
                                 Toast.makeText(this, "Not Found!", Toast.LENGTH_SHORT).show();
@@ -270,7 +279,8 @@ public class MainActivity extends AppCompatActivity {
                                         movieMap.get("released").toString(),
                                         movieMap.get("actors").toString(),
                                         movieMap.get("directors").toString(),
-                                        movieMap.get("title_slug").toString()
+                                        movieMap.get("title_slug").toString(),
+                                        auth.getCurrentUser().getUid()
                                 );
                                 if (success) {
                                     loadFromSQLite();

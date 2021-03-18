@@ -18,13 +18,12 @@
             android:id="@+id/add_movie_title_dialog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorDark"
             android:ems="10"
             android:hint="Movie Title"
             android:inputType="text"
             android:padding="10dp"
-            android:textColor="@color/colorWhite"
-            android:textColorHint="@color/colorLight" />
+            android:textColor="@color/colorGrey"
+            android:textColorHint="@color/colorGrey" />
 
         <Button
             android:id="@+id/fetch_button_dialog"
@@ -79,6 +78,16 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/monts_reg"
                     android:text="Movie Plot"
+                    android:layout_marginTop="4dp"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/result_movie_genre_dialog"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/monts_reg"
+                    android:layout_marginTop="4dp"
+                    android:text="Movie Genre"
                     android:textSize="14sp" />
 
                 <LinearLayout

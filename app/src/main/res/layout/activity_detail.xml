@@ -33,10 +33,10 @@
             android:id="@+id/detail_movie_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Title"
-            android:padding="8dp"
-            android:fontFamily="@font/monts_reg"
             android:layout_marginTop="2dp"
+            android:fontFamily="@font/monts_reg"
+            android:padding="8dp"
+            android:text="Title"
             android:textColor="@color/colorWhite"
             android:textSize="25dp" />
 
@@ -44,18 +44,16 @@
             android:id="@+id/detail_movie_plot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Movie Plot"
             android:fontFamily="@font/opensans_reg"
             android:padding="2dp"
+            android:text="Movie Plot"
             android:textColor="@color/colorLight"
             android:textSize="18sp" />
 
         <com.google.android.material.chip.ChipGroup
-            android:layout_width="match_parent"
             android:id="@+id/detail_chip_group"
-            android:layout_height="wrap_content">
-
-        </com.google.android.material.chip.ChipGroup>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:id="@+id/detail_movie_share"

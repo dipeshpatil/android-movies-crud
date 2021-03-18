@@ -162,7 +162,8 @@ public class AddMovieActivity extends AppCompatActivity {
                                     movieMap.get("released").toString(),
                                     movieMap.get("actors").toString(),
                                     movieMap.get("directors").toString(),
-                                    movieMap.get("title_slug").toString()
+                                    movieMap.get("title_slug").toString(),
+                                    auth.getCurrentUser().getUid()
                             );
                             if (success)
                                 Toast.makeText(AddMovieActivity.this, "Success!", Toast.LENGTH_SHORT).show();

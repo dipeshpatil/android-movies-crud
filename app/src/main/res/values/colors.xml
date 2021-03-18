@@ -26,4 +26,5 @@
 
     <color name="colorLight">#d1d8e0</color>
     <color name="colorDark">#151515</color>
+    <color name="colorGrey">#FF808080</color>
 </resources>

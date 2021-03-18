@@ -33,6 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_9 = "actors";
     public static final String COL_10 = "director";
     public static final String COL_11 = "title_slug";
+    public static final String COL_12 = "firebase_uid";
     public Context context;
 
     public DatabaseHelper(Context context) {
@@ -53,7 +54,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_8 + " TEXT, " +
                 COL_9 + " TEXT, " +
                 COL_10 + " TEXT, " +
-                COL_11 + " TEXT " +
+                COL_11 + " TEXT, " +
+                COL_12 + " TEXT " +
                 ")"
         );
     }
@@ -72,7 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ).getCount();
     }
 
-    public boolean insertData(@NonNull MovieItem item) {
+    public boolean insertData(@NonNull MovieItem item, String uid) {
         return insertData(
                 item.getTitle(),
                 item.getPlot(),
@@ -83,7 +85,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 item.getReleased(),
                 item.getActors(),
                 item.getDirectors(),
-                item.getTitle_slug()
+                item.getTitle_slug(),
+                uid
         );
     }
 
@@ -97,7 +100,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String released,
             String actors,
             String directors,
-            String title_slug
+            String title_slug,
+            String uid
     ) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -112,6 +116,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_9, actors);
         contentValues.put(COL_10, directors);
         contentValues.put(COL_11, title_slug);
+        contentValues.put(COL_12, uid);
 
         long result = sqLiteDatabase.insert(
                 TABLE_NAME,
@@ -119,10 +124,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 contentValues
         );
 
-        if (result == -1) {
-            return false;
-        }
-        return true;
+        return result != -1;
     }
 
     public Cursor getAllData(int choice) {
@@ -195,7 +197,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String released,
             String actors,
             String directors,
-            String title_slug
+            String title_slug,
+            String uid
     ) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -210,6 +213,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_9, actors);
         contentValues.put(COL_10, directors);
         contentValues.put(COL_11, title_slug);
+        contentValues.put(COL_12, uid);
 
         sqLiteDatabase.update(
                 TABLE_NAME,
@@ -218,16 +222,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{id}
         );
 
-        return true;
-    }
-
-    public boolean deleteData(String id) {
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        sqLiteDatabase.delete(
-                TABLE_NAME,
-                "ID = ?",
-                new String[]{id}
-        );
         return true;
     }
 }

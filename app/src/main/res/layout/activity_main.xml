@@ -11,12 +11,12 @@
         android:id="@+id/add_floating_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/colorAmber"
-        android:src="@drawable/ic_baseline_add_24"
+        android:layout_margin="16dp"
+        app:backgroundTint="@color/colorDanger"
+        app:srcCompat="@drawable/ic_baseline_add_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/linear_layout" />
+        app:layout_constraintEnd_toEndOf="@+id/linear_layout"
+        app:tint="@color/colorWhite" />
 
     <LinearLayout
         android:id="@+id/linear_layout"
@@ -71,8 +71,7 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 
